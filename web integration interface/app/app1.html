@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.1.0/mapquest.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.1.0/mapquest.css"/>
+
+    <script type="text/javascript">
+      window.onload = function() {
+        L.mapquest.key = '4olNLkahQQHP0cyyBC40QUPtTwLQxjrl';
+         L.mapquest.directions().route({
+          start: '24 Willie Mays Plaza, San Francisco, CA 94107',
+          end: '1825 4th St, San Francisco, CA 94158',
+          waypoints: [ '101 China Basin St, San Francisco, CA 94158', '1569 3rd St, San Francisco, CA 94158']
+        });
+        L.mapquest.geocoding().geocode({
+          street: '60 Pier 48',
+          city: 'San Francisco',
+          state: 'CA',
+          postalCode: '94158'
+        }, createMap);
+
+
+        function createMap(error, response) {
+          var location = response.results[0].locations[0];
+          var latLng = location.displayLatLng;
+          var map = L.mapquest.map('map', {
+            center: latLng,
+            layers: L.mapquest.tileLayer('map'),
+            zoom: 5
+          });
+          //TODO: add database request from Drone LAT,LONG
+          L.marker([37.7761859, -122.3887722], {
+          icon: L.mapquest.icons.marker(),
+          draggable: false
+        }).bindPopup('Drone Position').addTo(map);
+         
+         L.circle([37.7761859, -122.3887722], { radius: 50 }).addTo(map);
+
+            var denverLatLngs = [
+          [37.778330, -122.396386],
+          [37.779127, -122.388747],
+          [37.770223, -122.387545],
+          [37.770443, -122.395399]
+        ];
+
+        //L.polygon(denverLatLngs, {color: 'red'}).addTo(map);
+
+        }
+      }
+    </script>
+  </head>
+
+  <body style="border: 0; margin: 0;">
+    <div id="map" style="width: 100%; height: 530px;"></div>
+  </body>
+</html>
